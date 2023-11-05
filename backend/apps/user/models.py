@@ -16,3 +16,6 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
     
+    @property
+    def posts(self):
+        return self.post_set.all()

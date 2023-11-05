@@ -31,6 +31,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
     'rest_framework_simplejwt.token_blacklist',
+    'apps.user',
+    'apps.post',
+    'apps.comment',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +75,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'django',
-        'USER': 'username',
+        'USER': 'user',
         'PASSWORD': 'password',
         'HOST': 'db',
         'PORT': '5432',
@@ -153,4 +156,4 @@ REST_FRAMEWORK = {
     # ]
 }
 
-# AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'user.User'
