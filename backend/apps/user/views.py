@@ -90,7 +90,7 @@ class UserViewSet(viewsets.ModelViewSet):
         user = self.get_object(pk=pk)
         password_serializer = ChangePasswordSerializer(data=request.data)
         if password_serializer.is_valid():
-            user.set_password(password_serializer.validated_data['password'])
+            user.set_password(password_serializer.validated_data['password1'])
             user.save()
             return Response({'message': 'Password changed successfully'}, status=status.HTTP_200_OK)
         else:

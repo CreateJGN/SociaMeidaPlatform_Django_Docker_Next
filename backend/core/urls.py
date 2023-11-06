@@ -20,6 +20,8 @@ from django.urls import path, include
 # Login
 from apps.user.views import LoginView
 
+
+
 # SimpleJwt
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
@@ -63,5 +65,8 @@ urlpatterns = [
     # Login
     path('login/', LoginView.as_view(), name='login'),
 
+    # Viewsets
     path('', include('apps.user.routers')),
+    path('', include('apps.post.routers')),
+    path('', include('apps.comment.routers')),
 ]

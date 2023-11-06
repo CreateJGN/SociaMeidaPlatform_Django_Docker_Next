@@ -30,7 +30,7 @@ class ChangePasswordSerializer(serializers.Serializer):
     password2 = serializers.CharField(required=True, write_only=True, min_length=5)
 
     def validate(self, data):
-        if data['password'] != data['password2']:
+        if data['password1'] != data['password2']:
             raise serializers.ValidationEvent('Passwords dont match')
         else:
             return data
@@ -40,7 +40,7 @@ class SearchUserSerializer(serializers.ModelSerializer):
     posts_count = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'bio', 'image',)
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'bio', 'image', 'posts_count',)
 
     def get_posts_count(self, obj):
         # posts is @property
