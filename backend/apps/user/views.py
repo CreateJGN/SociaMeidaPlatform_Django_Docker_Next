@@ -1,13 +1,23 @@
 from rest_framework import viewsets
+from apps.user.models import User
 from .serializers import (
     UserSerializer,
-    UserCreateSerializer
+    UserCreateSerializer,
+    ChangePasswordSerializer,
+    CustomTokenObtainPairSerializer,
+    SearchUserSerializer,
+    UserLoggedSerializer,
 )
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
+from rest_framework_simplejwt.views import TokenObtainPairView
+from django.contrib.auth import authenticate
+from rest_framework.views import APIView
+from django.db.models.query_utils import Q
+from .pagination import CustomPagination
 
 def staff_required(view_func):
     def wrapped_view(view_instance, request, *args, **kwargs):
@@ -78,3 +88,58 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(methods=['POST'], detail=True)
     def change_password(self, request, pk=None):
         user = self.get_object(pk=pk)
+        password_serializer = ChangePasswordSerializer(data=request.data)
+        if password_serializer.is_valid():
+            user.set_password(password_serializer.validated_data['password'])
+            user.save()
+            return Response({'message': 'Password changed successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response(password_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+# Auth
+
+class LoginView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        username = request.data.get('username', '')
+        password = request.data.get('password', '')
+        user = authenticate(username=username, password=password)
+
+        if user:
+            login_serializer = self.get_serializer(data=request.data)
+            if login_serializer.is_valid():
+                user_serializer = UserSerializer(user)
+                return Response({
+                    'access': login_serializer.validated_data['access'],
+                    'refresh': login_serializer.validated_data['refresh'],
+                    'user': user_serializer.data,
+                    'message': 'Login successful',
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response(login_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message': 'Invalid username or password'}, status=status.HTTP_400_BAD_REQUEST)
+
+# urls.py(project)  
+
+class SearchUserView(APIView):
+    def get(self, request):
+        search_term = request.query_params.get('search')
+        matches = User.objects.filter(
+            Q(username__icontains=search_term) |
+            Q(first_name__icontains=search_term) |
+            Q(last_name__icontains=search_term)
+        ).distinct()
+
+        paginator = CustomPagination()
+        results = paginator.paginate_queryset(matches, request)
+
+        user_search_serializer = SearchUserSerializer(results, many=True)
+        return paginator.get_paginated_response(user_search_serializer.data)
+
+class UserLoggedDataView(APIView):
+    def get(self, request):
+        user = request.user
+        user_serializer = UserLoggedSerializer(user)
+        return Response(user_serializer.data, status=status.HTTP_200_OK)
