@@ -43,8 +43,8 @@ export interface User {
 export interface AuthState {
   access: string | null;
   refresh: string | null;
-  is_authenticated: boolean;
-  is_loading: boolean;
+  isAuthenticated: boolean;
+  isLoading: boolean;
   user: User | null;
 }
 

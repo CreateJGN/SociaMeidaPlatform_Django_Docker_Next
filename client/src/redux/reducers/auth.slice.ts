@@ -4,8 +4,8 @@ import { AuthState } from "@/interfaces/interface";
 const initialState: AuthState = {
   access: null,
   refresh: null,
-  is_authenticated: false,
-  is_loading: true,
+  isAuthenticated: false,
+  isLoading: true,
   user: null,
 };
 
@@ -16,8 +16,8 @@ const authSlice = createSlice({
     loginRedux: (state, { payload }) => {
       state.access = localStorage.getItem("access");
       state.refresh = localStorage.getItem("refresh");
-      state.is_authenticated = true;
-      state.is_loading = false;
+      state.isAuthenticated = true;
+      state.isLoading = false;
       state.user = payload;
     },
     logoutRedux: (state) => {
@@ -25,8 +25,8 @@ const authSlice = createSlice({
       localStorage.removeItem("refresh");
       state.access = null;
       state.refresh = null;
-      state.is_authenticated = false;
-      state.is_loading = true;
+      state.isAuthenticated = false;
+      state.isLoading = true;
       state.user = null;
     },
   },
