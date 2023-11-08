@@ -1,10 +1,14 @@
 "use client";
 import { Form } from "@/interfaces/interface";
 import Image from "next/image";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { BsFillImageFill } from "react-icons/bs";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { login, register } from "@/services/auth";
+import toast, { Toaster } from "react-hot-toast";
+import { useAppDispatch } from "@/redux/hooks";
+import { loginRedux } from "@/redux/reducers/auth.slice";
 
 export const AuthForm = ({ process }: { process: string }) => {
   const [form, setForm] = useState<Form>({});
@@ -13,6 +17,9 @@ export const AuthForm = ({ process }: { process: string }) => {
   const imgRef = useRef<HTMLInputElement>(null);
 
   const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -28,6 +35,51 @@ export const AuthForm = ({ process }: { process: string }) => {
       setPrevImage(reader.result);
     };
   };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (pathname === "/login") {
+      try {
+        const { message, user } = await login(form);
+        toast.success(message, { duration: 1000 });
+        dispatch(loginRedux(user));
+
+        setTimeout(() => {
+          toast.dismiss();
+          router.push("/");
+        }, 1500);
+      } catch (error: any) {
+        toast.error(error.response.data.message, { duration: 2500 });
+      }
+    } else {
+      try {
+        const formData = new FormData();
+        formData.append("username", form.username);
+        formData.append("password", form.password);
+        formData.append("email", form.email);
+        formData.append("first_name", form.first_name || "");
+        formData.append("last_name", form.last_name || "");
+        formData.append("bio", form.bio || "");
+        formData.append("image", image!);
+
+        const { data, status } = await register(formData);
+        if (status === 201) {
+          const user = { username: data.username, password: form.password };
+          const { user: loggedUser } = await login(user);
+          dispatch(loginRedux(loggedUser));
+          toast.success("Successfully registered", { duration: 1000 });
+
+          setTimeout(() => {
+            toast.dismiss();
+            router.push("/");
+          }, 1500);
+        }
+      } catch (error: any) {
+        toast.error(error.response.data.message, { duration: 2500 });
+      }
+    }
+  };
+
   return (
     <div
       className="h-screen w-screen flex items-center justify-center"
@@ -39,6 +91,7 @@ export const AuthForm = ({ process }: { process: string }) => {
       <form
         className="relative flex flex-col w-[580px] justify-center gap-y-5 bg-white/[.03] py-10 px-12
       backdrop-blur-[3px]"
+        onSubmit={handleSubmit}
       >
         <h1 className="text-5xl font-bold text-white">{process}</h1>
         <input
@@ -59,71 +112,87 @@ export const AuthForm = ({ process }: { process: string }) => {
           autoFocus
           onChange={handleChange}
         />
-        <input
-          type="email"
-          placeholder="Email"
-          name="email"
-          className="input"
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          placeholder="First Name"
-          name="first_name"
-          className="input"
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          placeholder="Last Name"
-          name="last_name"
-          className="input"
-          onChange={handleChange}
-        />
-        <textarea
-          placeholder="Bio"
-          name="bio"
-          rows={5}
-          className="input resize-none"
-          onChange={handleChange}
-        />
-        <input
-          type="file"
-          className="hidden"
-          name="image"
-          required
-          onChange={fileSelected}
-          ref={imgRef}
-        />
-        {image === undefined && (
-          <BsFillImageFill
-            className="inputImage"
-            onClick={() => imgRef.current?.click()}
-          />
-        )}
 
-        {prevImage && (
-          <div className="w-full max-w-[80px] h-[80px] self-end mr-5 top-8 absolute">
-            <Image
-              src={prevImage}
-              alt="prevImage"
-              fill
-              placeholder="blur"
-              blurDataURL="/blur.webp"
-              className="rounded-full object-cover cursor-pointer"
-              onClick={() => imgRef.current?.click()}
+        {pathname === "/register" && (
+          <>
+            <input
+              type="email"
+              placeholder="Email"
+              name="email"
+              className="input"
+              onChange={handleChange}
             />
-          </div>
+            <input
+              type="text"
+              placeholder="First Name"
+              name="first_name"
+              className="input"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              placeholder="Last Name"
+              name="last_name"
+              className="input"
+              onChange={handleChange}
+            />
+            <textarea
+              placeholder="Bio"
+              name="bio"
+              rows={5}
+              className="input resize-none"
+              onChange={handleChange}
+            />
+            <input
+              type="file"
+              className="hidden"
+              name="image"
+              required
+              onChange={fileSelected}
+              ref={imgRef}
+            />
+            {image === undefined && (
+              <BsFillImageFill
+                className="inputImage"
+                onClick={() => imgRef.current?.click()}
+              />
+            )}
+
+            {prevImage && (
+              <div className="w-full max-w-[80px] h-[80px] self-end mr-5 top-8 absolute">
+                <Image
+                  src={prevImage}
+                  alt="prevImage"
+                  fill
+                  placeholder="blur"
+                  blurDataURL="/blur.webp"
+                  className="rounded-full object-cover cursor-pointer"
+                  onClick={() => imgRef.current?.click()}
+                />
+              </div>
+            )}
+          </>
         )}
 
         {pathname === "/login" ? (
-          <Link href={"/register"}>No account? Register Here.</Link>
+          <Link
+            href={"/register"}
+            className="text-[15px] font-semibold text-blue-600 self-end"
+          >
+            No account? Register Here.
+          </Link>
         ) : (
-          <Link href={"/login"}>Already have an account? Login Here.</Link>
+          <Link
+            href={"/login"}
+            className="text-[15px] font-semibold text-blue-600 self-end"
+          >
+            Already have an account? Login Here.
+          </Link>
         )}
 
         <button className="formButton">{process}</button>
       </form>
+      <Toaster />
     </div>
   );
 };
