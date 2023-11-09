@@ -8,12 +8,12 @@ export const useAuth = () => {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { is_authenticated } = useAppSelector((state) => state.auth);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   /* Protected Login / Register */
   useEffect(() => {
     async function verifyToken() {
-      if (!is_authenticated && localStorage.getItem("access") !== null) {
+      if (!isAuthenticated && localStorage.getItem("access") !== null) {
         try {
           await refreshToken();
           router.push("/");
@@ -28,7 +28,7 @@ export const useAuth = () => {
       }
     }
     verifyToken();
-  }, [is_authenticated]);
+  }, [isAuthenticated]);
 
   return { router, pathname, dispatch, authChecked };
 };
