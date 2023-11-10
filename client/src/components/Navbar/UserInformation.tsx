@@ -10,19 +10,47 @@ interface Props {
   id: number;
   firstName: string;
   lastName: string;
+  showOptions: boolean;
 }
 
-export const UserInformation = ({ image, id, firstName, lastName }: Props) => {
+export const UserInformation = ({
+  image,
+  id,
+  firstName,
+  lastName,
+  showOptions,
+}: Props) => {
   const dispatch = useAppDispatch();
-  const [toggle, setToggle] = useState();
+  const [toggle, setToggle] = useState(false);
+
+  const handleTheme = () => {
+    setToggle(!toggle);
+    document.documentElement.classList.toggle("dark");
+    if (localStorage.getItem("theme") === "light") {
+      localStorage.setItem("theme", "dark");
+    } else {
+      localStorage.setItem("theme", "light");
+    }
+  };
+
+  if (localStorage.getItem("theme") === "light") {
+    document.documentElement.classList.remove("dark");
+  } else if (localStorage.getItem("theme") === "dark") {
+    document.documentElement.classList.add("dark");
+  } else {
+    localStorage.setItem("theme", "light");
+  }
   return (
     <div
-      className="absolute w-[90%] max-w-[350px] bg-blue-500 dark:bg-gray-950 overflow-hidden shadow-md rounded-[4px]
-    transition-all duration-500 ease-in right-[5%] top-[108%]"
+      className={`absolute w-[90%] max-w-[350px] bg-blue-500 dark:bg-gray-950 overflow-hidden shadow-md rounded-[4px]
+      transition-all duration-500 ease-in right-[5%] top-[108%]
+      ${showOptions ? "max-h-[500px]" : "max-h-0"}
+      `}
     >
       <div
         className="flex absolute items-center top-[20px] right-[20px] cursor-pointer bg-gray-400 w-[45px]
       py-[2px] px-[3px] rounded-[15px]"
+        onClick={handleTheme}
       >
         <span
           className={`w-[18px] h-[18px] bg-blue-500 dark:bg-gray-950 rounded-full inline-block
@@ -30,8 +58,8 @@ export const UserInformation = ({ image, id, firstName, lastName }: Props) => {
         `}
         ></span>
       </div>
-      <div>
-        <div>
+      <div className="p-[20px]">
+        <div className="flex items-center">
           <div className="relative max-w-[50px] w-[45px] h-[45px] mr-[12px]">
             <Image
               src={`${process.env.NEXT_PUBLIC_API_URL}${image}`}
@@ -55,9 +83,18 @@ export const UserInformation = ({ image, id, firstName, lastName }: Props) => {
           </div>
         </div>
         <hr className="border-0 h-[1px] my-[15px] mx-0 bg-gray-200/50" />
-        <div>
+        <div className="flex items-center">
           <div className="w-12 h-12 bg-gray-50 rounded-full mr-[16px] flex justify-center items-center">
             <RiFeedbackFill className="text-blue-600 text-[32px] dark:text-black" />
+          </div>
+          <div>
+            <p className="text-white font-semibold">Feedback?!</p>
+            <Link
+              className="text-sky-100/70 dark:text-white/40 text-sm"
+              href={"#"}
+            >
+              Help us improve!
+            </Link>
           </div>
         </div>
         <hr className="border-0 h-[1px] my-[15px] mx-0 bg-gray-200/50" />
