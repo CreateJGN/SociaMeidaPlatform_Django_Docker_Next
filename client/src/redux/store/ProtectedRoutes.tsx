@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { refreshToken, userLogged, verify } from "@/services/auth";
 import { loginRedux } from "../reducers/auth.slice";
@@ -21,6 +21,7 @@ export const ProtectedRoutes = ({
         try {
           await refreshToken();
           await verify();
+
           const user = await userLogged();
           dispatch(loginRedux(user));
         } catch (error: any) {
@@ -38,5 +39,6 @@ export const ProtectedRoutes = ({
 
   if (showLoading) return <Loading />;
   if (!isAuthenticated && isLoading) return redirect("/login");
+
   return <>{children}</>;
 };
