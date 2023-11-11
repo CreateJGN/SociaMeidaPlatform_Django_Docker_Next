@@ -1,5 +1,5 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { AiFillCaretDown } from "react-icons/ai";
 
 interface Props {
@@ -15,7 +15,7 @@ export const Head = ({ image, id, author }: Props) => {
         <div className="relative w-fit max-w-[40px] h-[40px] aspect-square">
           <Image
             src={`${process.env.NEXT_PUBLIC_API_URL}${image}`}
-            alt="post image"
+            alt="#"
             fill
             loading="lazy"
             sizes="(max-width: 40px) 100vw"
@@ -23,6 +23,7 @@ export const Head = ({ image, id, author }: Props) => {
           />
         </div>
       </Link>
+
       <div className="ml-4">
         <Link
           href={`/profile/${id}`}
@@ -30,6 +31,7 @@ export const Head = ({ image, id, author }: Props) => {
         >
           {author}
         </Link>
+
         <small className="text-black/80 dark:text-white/80">
           Public{" "}
           <AiFillCaretDown className="text-black/80 dark:text-white text-[15px] ml-1 inline-block" />

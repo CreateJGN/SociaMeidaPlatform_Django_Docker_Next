@@ -17,3 +17,30 @@ export const createPost = async (post: FormData) => {
   });
   return data;
 };
+
+export const updatePost = async (post: FormData, id: number) => {
+  const { data } = await API.put(`posts/${id}/`, post, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("access")}`,
+    },
+  });
+  return data;
+};
+
+export const deletePost = async (id: number) => {
+  const { data } = await API.delete(`posts/${id}/`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("access")}`,
+    },
+  });
+  return data;
+};
+
+export const getPost = async (id: number) => {
+  const { data } = await API.get(`posts/${id}/`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("access")}`,
+    },
+  });
+  return data;
+};

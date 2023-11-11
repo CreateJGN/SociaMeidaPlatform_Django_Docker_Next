@@ -1,7 +1,7 @@
 "use client";
 import { Head } from "./Head";
 import { Multimedia } from "./Multimedia";
-import { ChangeEvent, useState, useRef, FormEvent } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import Image from "next/image";
 import { BsFillImageFill } from "react-icons/bs";
 import { createPost } from "@/services/post";
@@ -10,9 +10,9 @@ import { useRedux } from "@/hooks/useRedux";
 import toast, { Toaster } from "react-hot-toast";
 
 export const CreatePost = () => {
-  const [description, setDescription] = useState("");
   const [image, setImage] = useState<File>();
   const [prevImage, setPrevImage] = useState();
+  const [description, setDescription] = useState("");
 
   const imageRef = useRef<HTMLInputElement>(null);
   const openFormRef = useRef<HTMLDialogElement>(null);
@@ -66,20 +66,21 @@ export const CreatePost = () => {
   };
 
   return (
-    <div>
+    <div className="w-full bg-gray-200/30 dark:bg-dark-50 rounded-[6px] p-[20px] transition-colors duration-300 ease-in">
       <Head
         id={userLogged!.id}
         image={userLogged!.image}
         author={userLogged!.username}
       />
+
       <div className="px-[15px] pt-[20px]">
         <button
-          className="w-full border-b-2 block text-slate-900/70 dark:text-white/80
-        border-slate-700/50 dark:border-gray-300 pb-3 text-[15px] cursor-pointer text-start my-3"
+          className="w-full border-b-2 block text-slate-900/70 dark:text-white/80 border-slate-700/50 dark:border-gray-300 pb-3 text-[15px] cursor-pointer text-start my-3"
           onClick={() => openFormRef.current!.showModal()}
         >
           What's on your mind?
         </button>
+
         <Multimedia />
       </div>
 
