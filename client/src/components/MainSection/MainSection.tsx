@@ -1,3 +1,11 @@
+import { CreatePost } from "./CreatePost";
+import { PostContainer } from "./PostContainer";
+
 export const MainSection = () => {
-  return <div>MainSection</div>;
+  return (
+    <div className="basis-[47%]">
+      <CreatePost />
+      <PostContainer />
+    </div>
+  );
 };
