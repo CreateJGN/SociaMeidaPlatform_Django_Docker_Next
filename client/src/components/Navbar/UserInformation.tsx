@@ -21,7 +21,10 @@ export const UserInformation = ({
   showOptions,
 }: Props) => {
   const dispatch = useAppDispatch();
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(() => {
+    if (localStorage.getItem("theme") === "dark") return false;
+    return true;
+  });
 
   const handleTheme = () => {
     setToggle(!toggle);
