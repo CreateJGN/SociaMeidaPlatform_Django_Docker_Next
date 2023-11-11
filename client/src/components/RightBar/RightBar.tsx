@@ -13,13 +13,13 @@ export const RightBar = () => {
               <Image
                 src={"/subaru.jpeg"}
                 alt="subaru logo pic"
-                fill
                 loading="lazy"
+                fill
                 sizes="(max-width: 45px) 100vw, 40px"
                 className="cursor-pointer mt-3"
               />
             </div>
-            <div>
+            <div className="max-w-[200px]">
               <h4 className="text-[16px] font-semibold text-gray-800 dark:text-white/70">
                 Subaru WRX
               </h4>
