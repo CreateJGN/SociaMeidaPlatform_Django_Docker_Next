@@ -1,5 +1,5 @@
-import { API } from "./axios";
 import { Form } from "@/interfaces/interface";
+import { API } from "./axios";
 
 export const login = async (credentials: Form) => {
   const { data } = await API.post("login/", credentials);

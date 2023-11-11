@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 
 export const useAuth = () => {
   const [authChecked, setAuthChecked] = useState(false);
-  const pathname = usePathname();
   const router = useRouter();
+  const pathname = usePathname();
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 

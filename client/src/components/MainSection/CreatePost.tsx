@@ -17,7 +17,7 @@ export const CreatePost = () => {
   const imageRef = useRef<HTMLInputElement>(null);
   const openFormRef = useRef<HTMLDialogElement>(null);
 
-  const { dispatch, user } = useRedux();
+  const { dispatch, userLogged } = useRedux();
 
   const fileSelected = (e: ChangeEvent<HTMLInputElement>) => {
     setImage(e.target.files![0]);
@@ -48,7 +48,7 @@ export const CreatePost = () => {
       const formData = new FormData();
       formData.append("description", description);
       formData.append("image", image! || "");
-      formData.append("author", user!.id.toString());
+      formData.append("author", userLogged!.id.toString());
 
       const newPost = await createPost(formData);
       dispatch(addPostRedux(newPost));
@@ -67,7 +67,11 @@ export const CreatePost = () => {
 
   return (
     <div>
-      <Head id={user!.id} image={user!.image} author={user!.username} />
+      <Head
+        id={userLogged!.id}
+        image={userLogged!.image}
+        author={userLogged!.username}
+      />
       <div className="px-[15px] pt-[20px]">
         <button
           className="w-full border-b-2 block text-slate-900/70 dark:text-white/80

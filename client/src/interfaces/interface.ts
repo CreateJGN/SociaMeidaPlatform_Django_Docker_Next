@@ -1,3 +1,22 @@
+export interface User {
+  id: number;
+  posts: Post[];
+  posts_count: number;
+  last_login: Date | null;
+  is_superuser: boolean;
+  username: string;
+  first_name: string;
+  last_name: string;
+  is_staff: boolean;
+  is_active: boolean;
+  date_joined: Date;
+  email: string;
+  image: string;
+  bio: string | null;
+  groups: any[];
+  user_permissions: any[];
+}
+
 export interface Post {
   id: number;
   author: string;
@@ -18,25 +37,6 @@ export interface Comment {
   post: string;
   text: string;
   updated_at: Date;
-}
-
-export interface User {
-  user_permissions: any[];
-  groups: any[];
-  bio: string | null;
-  image: string;
-  email: string;
-  date_jointed: Date;
-  id: number;
-  posts: Post[];
-  posts_count: number;
-  last_login: Date | null;
-  is_superuser: boolean;
-  username: string;
-  first_name: string;
-  last_name: string;
-  is_staff: boolean;
-  is_active: boolean;
 }
 
 /* Redux */
