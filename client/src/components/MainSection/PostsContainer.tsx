@@ -6,11 +6,12 @@ import { PostHeadContainer } from "./PostHeadContainer";
 
 const variants = {
   hidden: { opacity: 0, x: 100 },
-  visibile: { opacity: 1, x: 0, transition: { duration: 0.9 } },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.9 } },
 };
 
 export const PostsContainer = () => {
-  const { posts } = useRedux();
+  const { posts, userLogged } = useRedux();
+  console.log(posts);
   const { setPage } = usePosts();
 
   return (
@@ -19,13 +20,22 @@ export const PostsContainer = () => {
         {posts.map((post, index) => {
           return (
             <motion.div
-              key={index}
+              key={post.id}
               variants={variants}
               initial="hidden"
               animate={"visible"}
               exit={"hidden"}
             >
-              <PostHeadContainer authorId={post.author_id} image={post.image} />
+              <PostHeadContainer
+                post={post}
+                posts={posts}
+                authorId={post.author_id ?? userLogged!.id}
+                authorUsername={
+                  typeof post.author === "number"
+                    ? userLogged!.username
+                    : post.author
+                }
+              />
             </motion.div>
           );
         })}
