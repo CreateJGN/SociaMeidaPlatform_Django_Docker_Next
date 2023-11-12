@@ -1,6 +1,11 @@
-import { useState, ChangeEvent, useRef } from "react";
+import { Post } from "@/interfaces/interface";
+import { ChangeEvent, useRef, FormEvent } from "react";
 import { BsFillImageFill } from "react-icons/bs";
 import Image from "next/image";
+import { updatePost } from "@/services/post";
+import toast from "react-hot-toast";
+import { useRedux } from "@/hooks/useRedux";
+import { updatePostRedux } from "@/redux/reducers/post.slice";
 
 interface Props {
   image: File | undefined;
@@ -10,6 +15,7 @@ interface Props {
   prevImage: string | undefined;
   setPrevImage: (newPrevImage: string | undefined) => void;
   handleCloseUpdateModal: any;
+  post: Post;
 }
 
 export const ModalUpdate = ({
@@ -20,8 +26,10 @@ export const ModalUpdate = ({
   setPrevImage,
   prevImage,
   handleCloseUpdateModal,
+  post,
 }: Props) => {
   const imageRef = useRef<HTMLInputElement>(null);
+  const { dispatch } = useRedux();
 
   const fileSelected = (e: ChangeEvent<HTMLInputElement>) => {
     setImage(e.target.files![0]);
@@ -34,13 +42,33 @@ export const ModalUpdate = ({
     };
   };
 
+  const handleSubmit = async (e: FormEvent, postId: number) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("description", description || "");
+      formData.append("image", image || "");
+
+      const { data: postUpdated, message } = await updatePost(formData, postId);
+      toast.success(message, { duration: 2500 });
+      dispatch(updatePostRedux(postUpdated));
+
+      setDescription("");
+      setImage(undefined);
+      setPrevImage(undefined);
+      handleCloseUpdateModal();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       className="fixed top-0 right-0 w-full h-full bg-black/80 flex items-center justify-center z-[60]"
       onClick={handleCloseUpdateModal}
     >
-      <div>
-        <form className="form">
+      <div onClick={(e) => e.stopPropagation()}>
+        <form className="form" onSubmit={(e) => handleSubmit(e, post.id)}>
           <textarea
             rows={5}
             className="input resize-none"

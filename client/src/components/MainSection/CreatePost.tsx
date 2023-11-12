@@ -66,7 +66,7 @@ export const CreatePost = () => {
   };
 
   return (
-    <div className="w-full bg-gray-100 dark:bg-gray-900/30 rounded-[6px] p-[20px] transition-colors duration-300 ease-in">
+    <div className="w-full bg-gray-100 dark:bg-gray-900/30 rounded-[6px] p-[20px] transition-colors ease-in duration-300">
       <Head
         id={userLogged!.id}
         image={userLogged!.image}
