@@ -43,18 +43,20 @@ export const PostsContainer = () => {
 
               {/* Image */}
               <Suspense fallback={<Loading />}>
-                <div className="relative w-full max-w-[700px] h-[330px] mb-[5px]">
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_API_URL}${post.image}`}
-                    alt="#"
-                    fill
-                    loading="lazy"
-                    placeholder="blur"
-                    blurDataURL="/blur.webp"
-                    sizes="(max-width: 720px) 100vw, 700px, 500px, 300px"
-                    className="object-cover object-top cursor-pointer rounded-[5px]"
-                  />
-                </div>
+                {post.image !== null && (
+                  <div className="relative w-full max-w-[700px] h-[330px] mb-[5px]">
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_API_URL}${post.image}`}
+                      alt="#"
+                      fill
+                      loading="lazy"
+                      placeholder="blur"
+                      blurDataURL="/blur.webp"
+                      sizes="(max-width: 720px) 100vw, 700px, 500px, 300px"
+                      className="object-cover object-top cursor-pointer rounded-[5px]"
+                    />
+                  </div>
+                )}
               </Suspense>
             </motion.div>
           );

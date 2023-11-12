@@ -67,6 +67,12 @@ export const PostHeadContainer = ({
     handleOpenUpdateModal(id);
 
     setDescription(postToUpdate!.description);
+
+    if (postToUpdate?.image) {
+      image ?? setPrevImage(`${postToUpdate.image}`);
+    } else {
+      setPrevImage(undefined);
+    }
   };
 
   /* Delete */
