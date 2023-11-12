@@ -25,10 +25,7 @@ export const PostsContainer = () => {
               animate={"visible"}
               exit={"hidden"}
             >
-              <PostHeadContainer
-                authorId={post.author_id}
-                image={post.author_image}
-              />
+              <PostHeadContainer authorId={post.author_id} image={post.image} />
             </motion.div>
           );
         })}
