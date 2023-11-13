@@ -7,6 +7,8 @@ import { PostDescription } from "./PostDescription";
 import { Suspense } from "react";
 import Loading from "@/app/loading";
 import Image from "next/image";
+import { Likes } from "./Likes";
+import { ImageModal } from "./ImageModal";
 
 const variants = {
   hidden: { opacity: 0, x: 100 },
@@ -28,6 +30,8 @@ export const PostsContainer = () => {
               initial="hidden"
               animate={"visible"}
               exit={"hidden"}
+              className="w-full bg-gray-200/30 dark:bg-black p-[20px] shadow-md
+              text-gray-400 rounded-[6px] my-5 transition-colors duration-300 ease-in"
             >
               <PostHeadContainer
                 post={post}
@@ -58,6 +62,15 @@ export const PostsContainer = () => {
                   </div>
                 )}
               </Suspense>
+              {/* Likes */}
+
+              <Likes
+                likes={post.likes}
+                likesCount={post.likes.length}
+                postId={post.id}
+              />
+
+              <ImageModal post={post} posts={posts} />
             </motion.div>
           );
         })}

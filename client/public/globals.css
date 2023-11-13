@@ -25,6 +25,12 @@
       transform: rotate(360deg);
     }
   }
+  .modal::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  .modal::-webkit-scrollbar-thumb {
+    background-color: hsla(200, 3%, 50%, 0.5);
+  }
 }
 
 @layer components {
