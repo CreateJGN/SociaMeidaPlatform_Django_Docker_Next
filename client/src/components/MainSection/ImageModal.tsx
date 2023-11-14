@@ -46,7 +46,7 @@ export const ImageModal = ({
                 fill
                 loading="lazy"
                 placeholder="blur"
-                blurDataURL="/blur.svg"
+                blurDataURL="/blur.webp"
                 sizes="(max-width: 920px) 100vw, 700px, 500px, 300px"
                 className="object-contain"
               />

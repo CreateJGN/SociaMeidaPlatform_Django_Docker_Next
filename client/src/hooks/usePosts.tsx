@@ -1,5 +1,5 @@
 import { getPosts } from "@/services/post";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRedux } from "./useRedux";
 import { getPostsRedux } from "@/redux/reducers/post.slice";
 import { hasNoMore } from "@/redux/reducers/hasMore";
@@ -9,6 +9,13 @@ let PAGE_SIZE = 2;
 export const usePosts = () => {
   const [page, setPage] = useState(1);
   const { dispatch, posts } = useRedux();
+
+  const setPageCallback = useCallback(
+    (newPage: any) => {
+      setPage(newPage);
+    },
+    [page]
+  );
 
   useEffect(() => {
     async function fetchPosts() {
@@ -23,5 +30,6 @@ export const usePosts = () => {
     }
     fetchPosts();
   }, [page]);
-  return { setPage };
+
+  return { setPageCallback };
 };
