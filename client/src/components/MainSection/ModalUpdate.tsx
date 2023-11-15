@@ -1,48 +1,41 @@
-import { Post } from "@/interfaces/interface";
-import { ChangeEvent, useRef, FormEvent } from "react";
-import { BsFillImageFill } from "react-icons/bs";
 import Image from "next/image";
-import { updatePost } from "@/services/post";
 import toast from "react-hot-toast";
 import { useRedux } from "@/hooks/useRedux";
+import { updatePost } from "@/services/post";
+import { Post } from "@/interfaces/interface";
+import { BsFillImageFill } from "react-icons/bs";
+import { ChangeEvent, FormEvent, useRef } from "react";
 import { updatePostRedux } from "@/redux/reducers/post.slice";
+import { updateProfilePost } from "@/redux/reducers/profilePosts.slice";
 
 interface Props {
-  image: File | undefined;
+  post: Post;
   description: string;
-  setImage: (image: File | undefined) => void;
-  setDescription: (descrption: string) => void;
+  image: File | undefined;
   prevImage: string | undefined;
+  setImage: (image: File | undefined) => void;
+  setDescription: (description: string) => void;
   setPrevImage: (newPrevImage: string | undefined) => void;
   handleCloseUpdateModal: any;
-  post: Post;
 }
 
 export const ModalUpdate = ({
   image,
+  prevImage,
   description,
   setImage,
   setDescription,
   setPrevImage,
-  prevImage,
   handleCloseUpdateModal,
   post,
 }: Props) => {
   const imageRef = useRef<HTMLInputElement>(null);
-  const { dispatch } = useRedux();
+  const { dispatch, posts: postsRedux } = useRedux();
 
-  const fileSelected = (
-    e: ChangeEvent<HTMLInputElement>,
-    postImage: string
-  ) => {
+  const fileSelected = (e: ChangeEvent<HTMLInputElement>) => {
     setImage(e.target.files![0]);
-
-    const reader: any = new FileReader();
-    reader.readAsDataURL(e.target.files![0] || postImage);
-
-    reader.onloadend = () => {
-      setPrevImage(reader.result);
-    };
+    const newPrev = URL.createObjectURL(e.target.files![0]);
+    setPrevImage(newPrev);
   };
 
   const handleSubmit = async (e: FormEvent, postId: number) => {
@@ -53,8 +46,11 @@ export const ModalUpdate = ({
       formData.append("image", image || "");
 
       const { data: postUpdated, message } = await updatePost(formData, postId);
+      console.log(postUpdated);
       toast.success(message, { duration: 2500 });
-      dispatch(updatePostRedux(postUpdated));
+
+      if (postsRedux.length > 0) dispatch(updatePostRedux(postUpdated));
+      else dispatch(updateProfilePost(postUpdated));
 
       setDescription("");
       setImage(undefined);
@@ -64,15 +60,19 @@ export const ModalUpdate = ({
       console.log(error);
     }
   };
-
   return (
     <div
       className="fixed top-0 right-0 w-full h-full bg-black/80 flex items-center justify-center z-[60]"
-      onClick={handleCloseUpdateModal}
+      onClick={() => {
+        handleCloseUpdateModal();
+        setPrevImage(undefined);
+      }}
     >
       <div onClick={(e) => e.stopPropagation()}>
         <form className="form" onSubmit={(e) => handleSubmit(e, post.id)}>
+          <h1 className="text-5xl font-bold text-white">Update your Post</h1>
           <textarea
+            autoFocus
             rows={5}
             className="input resize-none"
             name="description"
@@ -85,7 +85,7 @@ export const ModalUpdate = ({
             type="file"
             className="hidden"
             ref={imageRef}
-            onChange={(e) => fileSelected(e, post.image)}
+            onChange={fileSelected}
           />
 
           {image === undefined && prevImage === undefined && (
@@ -106,8 +106,8 @@ export const ModalUpdate = ({
                 alt="#"
                 fill
                 loading="lazy"
+                sizes="(max-width: 620px) 100vw, 500px"
                 className="object-top object-cover"
-                sizes="(max-width: 620px) 100vw, 550px"
                 onClick={() => imageRef.current!.click()}
               />
             </div>
