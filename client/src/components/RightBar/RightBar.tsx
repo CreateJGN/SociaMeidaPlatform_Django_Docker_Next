@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export const RightBar = () => {
   return (
-    <div className="basis-[25%] sticky top-[85px] h-[calc(100vh-70px)]">
+    <div className="basis-[25%] sticky top-[85px] h-[calc(100vh-70px)] hidden md:block">
       <div>
         <h4 className="text-lg font-bold text-gray-800 dark:text-white/70">
           Sponsored
