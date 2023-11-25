@@ -159,8 +159,6 @@ function ProfilePage({ params }: { params: { id: string } }) {
                           className="relative w-full h-[450px] max-w-[calc(100%-150px)] cursor-pointer aspect-video mx-auto"
                           onClick={() => OpenImage(post.id)}
                         >
-                          console.log(
-                          {`${process.env.NEXT_PUBLIC_API_URL}${post.image}`})
                           <Image
                             src={`${process.env.NEXT_PUBLIC_API_URL}${post.image}`}
                             alt="#"
