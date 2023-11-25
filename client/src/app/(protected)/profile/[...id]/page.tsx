@@ -83,7 +83,7 @@ function ProfilePage({ params }: { params: { id: string } }) {
                 <p className="text-sm self-end">{user?.email}</p>
 
                 <span className="text-xs self-end">
-                  Total Posts:{" "}
+                  Posts writings:{" "}
                   <strong className="text-black">{user?.posts_count}</strong>
                 </span>
               </div>
@@ -101,7 +101,7 @@ function ProfilePage({ params }: { params: { id: string } }) {
                     loading="lazy"
                     placeholder="blur"
                     blurDataURL="/blur.webp"
-                    className="object-cover rounded-full"
+                    className="object-cover object-top rounded-full"
                   />
                 </div>
               </div>
@@ -131,13 +131,14 @@ function ProfilePage({ params }: { params: { id: string } }) {
             {/* Posts */}
             {profilePosts.map((post) => {
               return (
-                <AnimatePresence key={post.id}>
+                <AnimatePresence>
                   <motion.div
                     variants={variants}
                     initial="hidden"
                     animate={"visible"}
                     exit={"hidden"}
                     className="flex items-center justify-center w-4/5 my-6 mx-auto"
+                    key={post.id}
                   >
                     <div className="px-10 py-8 w-5/6 shadow-xl bg-gray-200 dark:bg-dark-100/80 dark:shadow-slate-950/30 rounded-md transition-colors duration-300 ease-in">
                       <PostHeadContainer
