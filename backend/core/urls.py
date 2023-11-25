@@ -19,9 +19,11 @@ schema_view = get_schema_view(
    openapi.Info(
       title="PostIt2 API",
       default_version='v1',
-      description="Test description",
+      description="Welcome to the Swagger Documentation for the PostIt2 API! \
+      Feel free to to interact with the API, or visit the frontend of the application \
+      at https://post-it2.vercel.app",
       terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="contact@snippets.local"),
+      contact=openapi.Contact(email="jason.kei.hall@gmail.com"),
       license=openapi.License(name="BSD License"),
    ),
    public=True,
