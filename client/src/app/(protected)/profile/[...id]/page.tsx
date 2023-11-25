@@ -154,7 +154,7 @@ function ProfilePage({ params }: { params: { id: string } }) {
 
                       <PostDescription description={post.description} />
 
-                      {post.image !== null && (
+                      {post.image && (
                         <div
                           className="relative w-full h-[450px] max-w-[calc(100%-150px)] cursor-pointer aspect-video mx-auto"
                           onClick={() => OpenImage(post.id)}
