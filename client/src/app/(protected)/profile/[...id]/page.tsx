@@ -166,7 +166,7 @@ function ProfilePage({ params }: { params: { id: string } }) {
                             placeholder="blur"
                             priority
                             blurDataURL="/blur.webp"
-                            sizes="(max-width: 1600px) 100vw, 700px, 500px"
+                            sizes="(max-width: 720px) 100vw, 700px, 500px, 300px"
                             className="object-cover object-top rounded-md"
                           />
                         </div>
