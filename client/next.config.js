@@ -6,7 +6,7 @@ const nextConfig = {
         protocol: "https",
         hostname: "postit-backend-v2jc.onrender.com",
         port: "",
-        pathname: "/**",
+        pathname: "/media/**",
       },
     ],
   },
