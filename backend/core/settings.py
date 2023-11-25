@@ -156,6 +156,10 @@ AUTH_USER_MODEL = 'user.User'
 CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS_DEPLOY')
 
 
+SWAGGER_SETTINGS = {
+    'DEFAULT_API_URL': 'https://postit-backend-v2jc.onrender.com',
+}
+
  # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
     #     'NAME': os.environ.get('DB_NAME_DEV'),
